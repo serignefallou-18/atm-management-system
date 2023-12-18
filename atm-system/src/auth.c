@@ -3,13 +3,13 @@
 
 char *USERS = "./data/users.txt";
 
-void loginMenu(char a[50], char pass[50])
+void loginMenu(char login[50], char pass[50])
 {
     struct termios oflags, nflags;
 
     system("clear");
     printf("\n\n\n\t\t\t\t   Bank Management System\n\t\t\t\t\t User Login:");
-    scanf("%s", a);
+    scanf("%s", login);
 
     // disabling echo
     tcgetattr(fileno(stdin), &oflags);
@@ -49,8 +49,8 @@ const char *getPassword(struct User u)
         if (strcmp(userChecker.name, u.name) == 0)
         {
             fclose(fp);
-            char *buff = userChecker.password;
-            return buff;
+            char *password = userChecker.password;
+            return password;
         }
     }
 

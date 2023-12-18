@@ -21,9 +21,9 @@ int getAccountFromFile(FILE *ptr, char name[50], struct Record *r)
 void saveAccountToFile(FILE *ptr, struct User u, struct Record r)
 {
     fprintf(ptr, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
-            &r->id,
-	    &u->id
-	    &u->name,
+            (&r)->id,
+	    (&u)->id,
+	    (&u)->name,
             r.accountNbr,
             r.deposit.month,
             r.deposit.day,
@@ -162,4 +162,38 @@ void checkAllAccounts(struct User u)
     }
     fclose(pf);
     success(u);
+}
+
+
+void registration(struct User u)
+{
+    FILE *fp;
+    
+    char pass[50];
+
+    system("clear");
+    printf("\n\n\n\t\t\t\t Welcome to page of Regisration\n\t\t\t\t\t \n");
+    printf("username :");
+    scanf("%s", (&u)->name);
+    printf("password:");
+    scanf("%s", (&u)->password);
+    printf("Confirm password:");
+    scanf("%s", &pass);
+
+    if (strcmp(u.password, pass) != 0)
+    {
+        printf("unmatched pasword try again");
+        registration(u);
+    }
+    else
+    {
+        if ((fp = fopen("./data/users.txt", "a")) == NULL)
+        {
+            printf("Error! opening file");
+            exit(1);
+        }else{
+            fprintf(fp,"%s %s",u.name,u.password);
+            success(u);
+        }
+    }
 }
