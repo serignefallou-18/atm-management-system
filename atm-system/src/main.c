@@ -1,6 +1,7 @@
 #include "header.h"
 #include <stdbool.h>
 
+
 void mainMenu(struct User u)
 {
     int option;
@@ -88,7 +89,7 @@ void initMenu(struct User *u)
             case 2:
                 // student TODO : add your **Registration** function
                 // here
-                registration();
+                registration(u);
                 r = 1;
                 break;
             case 3:
