@@ -33,11 +33,15 @@ struct User
 void loginMenu(char a[50], char pass[50]);
 void registerMenu(char a[50], char pass[50]);
 const char *getPassword(struct User u);
-void registration(struct User *u);
-int countLines();
 
 // system function
 void createNewAcc(struct User u);
 void mainMenu(struct User u);
 void checkAllAccounts(struct User u);
 void success(struct User u);
+
+
+//my own functions
+void registration(struct User *u);
+int countLines();
+void ViderBuffer();

@@ -2,6 +2,10 @@
 #include "stdio.h"
 #include "header.h"
 
+
+
+
+
 void registration(struct User *u)
 {
     FILE *fp;
@@ -9,16 +13,19 @@ void registration(struct User *u)
     char fileLogin[50], filePassword[50];
     int id;
 
-    u->id = countLines();
+    u->id = countLines()+1;
 reinscript:
     system("clear");
-    printf("\n\n\n\t\t\t\t\t\t\t\t\t  Welcome to page of Registration\n\t\t\t\t\t \n");
-    printf("\n\n\n\t\t\t\t\t\t\t\t\t  username: ");
+    printf("\n\n\n\t\t\t\t\t  Welcome to page of Registration\n\t\t\t\t\t \n");
+    printf("\n\n\n\t\t\t\t\t  username: ");
     scanf("%s", u->name);
-    printf("\n\n\n\t\t\t\t\t\t\t\t\t  password: ");
+    ViderBuffer();
+    printf("\n\n\n\t\t\t\t\t  password: ");
     scanf("%s", u->password);
-    printf("\n\n\n\t\t\t\t\t\t\t\t\t  Confirm password: ");
+    ViderBuffer();
+    printf("\n\n\n\t\t\t\t\t  Confirm password: ");
     scanf("%s", pass);
+    ViderBuffer();
 
     if (strcmp(u->password, pass) != 0)
     {
@@ -37,7 +44,7 @@ reinscript:
             while (fscanf(fp, "%d %49s %49s", &id, fileLogin, filePassword) == 3)
             {
                 // Comparaison des logins et mots de passe
-                if (strcmp(u->name, fileLogin) == 0 || strcmp(u->password, filePassword) == 0)
+                if (strcmp(u->name, fileLogin)== 0)
                 {
                     fclose(fp);
                     printf("username or password already exits please try again");
@@ -77,4 +84,23 @@ int countLines()
     fclose(file);
 
     return count;
+}
+
+void ViderBuffer(){
+    struct  User *u;
+    {
+        /* data */
+    };
+    
+    int c;
+    int cmp=0;
+    while ((c = getchar()) != '\n' && c != EOF){
+        cmp++;
+    }
+    if (cmp!=0){
+        printf("invalid format il ne dois pas y avoir d'espace\n");
+        exit(1);
+    } 
+        
+
 }
