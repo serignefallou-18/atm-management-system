@@ -3,14 +3,14 @@
 
 char *USERS = "./data/users.txt";
 
-void loginMenu(int id, char login[50], char pass[50])
+void loginMenu(char login[50], char pass[50])
 {
     struct termios oflags, nflags;
 
     system("clear");
     printf("\n\n\n\t\t\t\t   Bank Management System\n\t\t\t\t\t User Login:");
     scanf("%s", login);
-
+    ViderBuffer();
     // disabling echo
     tcgetattr(fileno(stdin), &oflags);
     nflags = oflags;
@@ -24,7 +24,7 @@ void loginMenu(int id, char login[50], char pass[50])
     }
     printf("\n\n\n\n\n\t\t\t\tEnter the password to login:");
     scanf("%s", pass);
-    id=getUserID(login, pass);
+    ViderBuffer();
     // restore terminal
     if (tcsetattr(fileno(stdin), TCSANOW, &oflags) != 0)
     {
@@ -63,8 +63,8 @@ const char *getPassword(struct User u)
 int getUserID(char username[50],char pass[50])
 {
     FILE *fp;
-    int userID = -1;
-    char name[20], password[20]; // Assurez-vous que ces tailles sont adaptées à votre fichier
+    int userID;
+    char name[50], password[50]; // Assurez-vous que ces tailles sont adaptées à votre fichier
 
     if ((fp = fopen("./data/users.txt", "r")) == NULL)
     {
@@ -72,9 +72,9 @@ int getUserID(char username[50],char pass[50])
         exit(1);
     }
 
-    while (fscanf(fp, "%d %s %s", &userID, name, password) != EOF)
+    while (fscanf(fp, "%d %49s %49s", &userID, name, password) ==3)
     {
-        if (strcmp(name, username) == 0 && strcmp(password,pass)==0)
+        if (strcmp(name, username) == 0)
         {
             fclose(fp);
             return userID;
@@ -83,5 +83,5 @@ int getUserID(char username[50],char pass[50])
 
     fclose(fp);
     printf("user inexitante");
-    return -1; // Retourne -1 si aucun utilisateur correspondant n'est trouvé
+    exit(1);// Retourne -1 si aucun utilisateur correspondant n'est trouvé
 }

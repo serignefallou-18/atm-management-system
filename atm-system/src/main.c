@@ -74,11 +74,12 @@ void initMenu(struct User *u)
 
             {
             case 1:
-                loginMenu(u->id,u->name, u->password);
+                loginMenu(u->name, u->password);
                 if (strcmp(u->password, getPassword(*u)) == 0)
-                {   
-                    u->id=
+                {  
+
                     printf("\n\nPassword Match!");
+                    u->id=getUserID(u->name,u->password);
                 }
                 else
                 {

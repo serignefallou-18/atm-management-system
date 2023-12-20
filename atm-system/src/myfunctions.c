@@ -48,7 +48,7 @@ reinscript:
                 if (strcmp(u->name, fileLogin)== 0)
                 {
                     fclose(fp);
-                    printf("username or password already exits please try again");
+                    printf("username already exits please try again");
                     goto reinscript;
                 }
             }
