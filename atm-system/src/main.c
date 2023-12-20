@@ -1,6 +1,7 @@
 #include "header.h"
 #include <stdbool.h>
 
+
 void mainMenu(struct User u)
 {
     int option;
@@ -73,9 +74,10 @@ void initMenu(struct User *u)
 
             {
             case 1:
-                loginMenu(u->name, u->password);
+                loginMenu(u->id,u->name, u->password);
                 if (strcmp(u->password, getPassword(*u)) == 0)
-                {
+                {   
+                    u->id=
                     printf("\n\nPassword Match!");
                 }
                 else
