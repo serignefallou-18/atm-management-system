@@ -45,3 +45,6 @@ void success(struct User u);
 void registration(struct User *u);
 int countLines();
 void ViderBuffer();
+int getUserID(char username[50],char pass[50]);
+void updateAccount(struct User u);
+int existaccount(int id);

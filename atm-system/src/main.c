@@ -26,6 +26,7 @@ void mainMenu(struct User u)
     case 2:
         // student TODO : add your **Update account information** function
         // here
+        updateAccount(u);
         break;
     case 3:
         // student TODO : add your **Check the details of existing accounts** function
@@ -76,8 +77,10 @@ void initMenu(struct User *u)
             case 1:
                 loginMenu(u->name, u->password);
                 if (strcmp(u->password, getPassword(*u)) == 0)
-                {
+                {  
+
                     printf("\n\nPassword Match!");
+                    u->id=getUserID(u->name,u->password);
                 }
                 else
                 {

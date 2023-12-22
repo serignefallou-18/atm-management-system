@@ -2,10 +2,6 @@
 #include "stdio.h"
 #include "header.h"
 
-
-
-
-
 void registration(struct User *u)
 {
     FILE *fp;
@@ -13,7 +9,6 @@ void registration(struct User *u)
     char fileLogin[50], filePassword[50];
     int id;
 
-    u->id = countLines()+1;
 reinscript:
     system("clear");
     printf("\n\n\n\t\t\t\t\t  Welcome to page of Registration\n\t\t\t\t\t \n");
@@ -41,13 +36,14 @@ reinscript:
         }
         else
         {
+            u->id = countLines("./data/users.txt") + 1;
             while (fscanf(fp, "%d %49s %49s", &id, fileLogin, filePassword) == 3)
             {
                 // Comparaison des logins et mots de passe
-                if (strcmp(u->name, fileLogin)== 0)
+                if (strcmp(u->name, fileLogin) == 0)
                 {
                     fclose(fp);
-                    printf("username or password already exits please try again");
+                    printf("username already exits please try again");
                     goto reinscript;
                 }
             }
@@ -59,13 +55,57 @@ reinscript:
     }
 }
 
-int countLines()
+void updateAccount(struct User u)
+{
+    int id;
+    int test;
+    system("clear");
+    printf("\n\n\n\t\t\t\t\t  Menu of update Account \n\t\t\t\t\t \n");
+
+    printf("\n\n\n\t\t\t\t\t  enter the id of the account: ");
+    scanf("%d", &id);
+    ViderBuffer();
+    test=existaccount(id);
+    if (test==0){
+        printf("compte inexistante ");
+    }
+
+    
+}
+
+int existaccount(int id)
+{
+    FILE *fp;
+    int ID;
+    int userID;
+    char name[50], password[50]; // Assurez-vous que ces tailles sont adaptées à votre fichier
+
+    if ((fp = fopen("./data/users.txt", "r")) == NULL)
+    {
+        printf("Error! opening file");
+        exit(1);
+    }
+
+    while (fscanf(fp, "%d %*d %*s %*d %*d/%*d/%*d %*s %*d %*f %*s", &ID)!=EOF)
+    {
+        if (ID==id)
+        {
+            fclose(fp);
+            return 1;
+        }
+    }
+
+    fclose(fp);
+    return 0; // Retourne -1 si aucun utilisateu
+}
+
+int countLines(char path[50])
 {
     FILE *file;
     int count = 0;
     char c;
 
-    file = fopen("./data/users.txt", "r");
+    file = fopen(path, "r");
 
     if (file == NULL)
     {
@@ -86,21 +126,19 @@ int countLines()
     return count;
 }
 
-void ViderBuffer(){
-    struct  User *u;
-    {
-        /* data */
-    };
+void ViderBuffer()
+{
     
+
     int c;
-    int cmp=0;
-    while ((c = getchar()) != '\n' && c != EOF){
+    int cmp = 0;
+    while ((c = getchar()) != '\n' && c != EOF)
+    {
         cmp++;
     }
-    if (cmp!=0){
+    if (cmp != 0)
+    {
         printf("invalid format il ne dois pas y avoir d'espace\n");
         exit(1);
-    } 
-        
-
+    }
 }
