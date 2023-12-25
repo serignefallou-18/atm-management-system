@@ -1,6 +1,8 @@
 #include "header.h"
+#include "time.h"
 
 const char *RECORDS = "./data/records.txt";
+time_t timestamp;
 
 int getAccountFromFile(FILE *ptr, char name[50], struct Record *r)
 {
@@ -103,15 +105,24 @@ void createNewAcc(struct User u)
     struct Record cr;
     char userName[50];
     FILE *pf = fopen(RECORDS, "a+");
+    struct tm *info;
 
 noAccount:
     system("clear");
     printf("\t\t\t===== New record =====\n");
     r.id = countLines("./data/records.txt") / 2;
 
-    printf("\nEnter today's date(mm/dd/yyyy):");
-    scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
-    ViderBuffer();
+    //automaatisation de la date
+    time(&timestamp);
+    info = localtime(&timestamp);
+    r.deposit.month=info->tm_mon + 1;
+    r.deposit.day=info->tm_mday;
+    r.deposit.year=info->tm_year + 1900;
+
+
+    // printf("\nEnter today's date(mm/dd/yyyy):");
+    // scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
+    // ViderBuffer();
     printf("\nEnter the account number:");
     scanf("%d", &r.accountNbr);
     ViderBuffer();
@@ -136,7 +147,8 @@ noAccount:
 typeAccount:
     printf("\nChoose the type of account:\n\t-> saving\n\t-> current\n\t-> fixed01(for 1 year)\n\t-> fixed02(for 2 years)\n\t-> fixed03(for 3 years)\n\n\tEnter your choice:");
     scanf("%s", r.accountType);
-    if ((r.accountType != "saving")&&(r.accountType != "fixed01")&&(r.accountType != "fixed02")&&(r.accountType != "fixed03")){
+    printf(r.accountType);
+    if ((strcmp(r.accountType, "saving")==0)&&(strcmp(r.accountType, "current")==0)&&(strcmp(r.accountType, "fixed01")==0)&&(strcmp(r.accountType, "fixed02")==0)&&(strcmp(r.accountType, "fixed03")==0)){
         printf("choix non disponnible");
         goto typeAccount;
     }

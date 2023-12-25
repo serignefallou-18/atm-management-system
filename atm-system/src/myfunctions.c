@@ -1,6 +1,8 @@
 
 #include "stdio.h"
 #include "header.h"
+#include <string.h>
+#include <ctype.h>
 
 void registration(struct User *u)
 {
@@ -57,46 +59,82 @@ reinscript:
 
 void updateAccount(struct User u)
 {
-    int id;
+    int idaccount;
     int test;
+    int choiceUpdate;
+    int phone;
+    int ligne;
+    char country[50];
     system("clear");
     printf("\n\n\n\t\t\t\t\t  Menu of update Account \n\t\t\t\t\t \n");
 
     printf("\n\n\n\t\t\t\t\t  enter the id of the account: ");
-    scanf("%d", &id);
+    scanf("%d", &idaccount);
     ViderBuffer();
-    test=existaccount(id);
-    if (test==0){
-        printf("compte inexistante ");
+    //  printf("%d", idaccount);
+    test = existaccount(idaccount, u.id);
+    if (test == 0)
+    {
+        printf("compte inexistant \n");
+        exit(1);
     }
+    else
+    {
+    update:
+        system("clear");
+        printf("\n\n\n\t\t\t\t\t  witch field do you want to change: \n\t\t\t\t\t \n");
+        printf("\n\n\n\(1)-------->Phone Number \n\t\t\t\t\t \n");
+        printf("\n\n\n\(2)-------->Country \n\t\t\t\t\t \n");
+        scanf("%d", &choiceUpdate);
+        ViderBuffer();
+        switch (choiceUpdate)
+        {
+        case 1:
+            printf("\n\n\n\t\t\t\t\t  Enter the new phone Number:");
+            scanf("%d", &phone);
+            ViderBuffer();
+            ligne = (2 * idaccount);
+            updateField(ligne, phone, "");
+            break;
+        case 2:
+            printf("\n\n\n\t\t\t\t\t  Enter the new country:");
+            scanf("%s", &country);
+            updateField(ligne, 0, country);
+            break;
+        default:
+            printf("\n\n\n\t\t\t\t\tinvalid input");
+            goto update;
+        }
 
-    
+        success(u);
+    }
 }
 
-int existaccount(int id)
+int existaccount(int idaccount, int iduser)
 {
     FILE *fp;
-    int ID;
-    int userID;
-    char name[50], password[50]; // Assurez-vous que ces tailles sont adaptées à votre fichier
+    int ID, x, z, a, b, m, e;
+    char y[50], d[50], g[50];
+    float f;
 
-    if ((fp = fopen("./data/users.txt", "r")) == NULL)
+    if ((fp = fopen("./data/records.txt", "r")) == NULL)
     {
-        printf("Error! opening file");
+        printf("Erreur lors de l'ouverture du fichier");
         exit(1);
     }
 
-    while (fscanf(fp, "%d %*d %*s %*d %*d/%*d/%*d %*s %*d %*f %*s", &ID)!=EOF)
+    while (fscanf(fp, "%d %d %49s %d %d/%d/%d %49s %d %f %49s",
+                  &ID, &x, y, &z, &a, &b, &m, d, &e, &f, g) == 11)
     {
-        if (ID==id)
+        if ((ID == idaccount) && iduser == x)
         {
             fclose(fp);
-            return 1;
+            return 1; // ID trouvé
         }
     }
 
     fclose(fp);
-    return 0; // Retourne -1 si aucun utilisateu
+    return 0; // ID non trouvé
 }
 
 int countLines(char path[50])
@@ -128,7 +166,6 @@ int countLines(char path[50])
 
 void ViderBuffer()
 {
-    
 
     int c;
     int cmp = 0;
@@ -141,4 +178,97 @@ void ViderBuffer()
         printf("invalid format il ne dois pas y avoir d'espace\n");
         exit(1);
     }
+}
+
+void updateField(int ligne, int newPhoneNumber, char country[50])
+{
+    FILE *file;
+    int ID, x, z, a, b, m, e;
+    char y[50], d[50], g[50];
+    float f;
+    int temp;
+    char valeur[1000];
+    char lines[1000][1000];
+    FILE *fp;
+
+    file = fopen("./data/records.txt", "r");
+
+    if (file == NULL)
+    {
+        printf("Erreur lors de l'ouverture du fichier");
+        exit(1);
+    }
+
+    int currentLine = 0;
+    while (fgets(lines[currentLine], 1000, file) && currentLine < 1000)
+    {
+        currentLine++;
+    }
+
+    if ((fp = fopen("./data/records.txt", "r")) == NULL)
+    {
+        printf("Erreur lors de l'ouverture du fichier");
+        exit(1);
+    }
+
+    while (fscanf(fp, "%d %d %49s %d %d/%d/%d %49s %d %f %49s",
+                  &ID, &x, y, &z, &a, &b, &m, d, &e, &f, g) == 11)
+    {
+        temp++;
+        if ((ID * 2) == ligne)
+        {
+            if (country == "")
+            {
+                snprintf(valeur, sizeof(valeur), "%d %d %49s %d %d/%d/%d %49s %d %f %49s", ID, x, y, z, a, b, m, d, newPhoneNumber, f, g);
+            }
+            if (newPhoneNumber == 0)
+            {
+                snprintf(valeur, sizeof(valeur), "%d %d %49s %d %d/%d/%d %49s %d %f %49s", ID, x, y, z, a, b, m, country, e, f, g);
+            }
+        }
+    }
+    removeExtraSpaces(valeur);
+    printf(valeur);
+    if (ligne >= 0 && ligne < 1000)
+    {
+        snprintf(lines[ligne], 1000, "%s\n", valeur);
+    }
+    else
+    {
+        printf("Numéro de ligne invalide.\n");
+        exit(1);
+    }
+    saveLinesToFile(lines);
+}
+
+void saveLinesToFile(char lines[1000][1000])
+{
+    FILE *file = fopen("./data/records.txt", "w");
+    if (file == NULL)
+    {
+        printf("Impossible d'écrire dans le fichier.\n");
+        exit(1);
+    }
+
+    for (int i = 0; i < 1000; i++)
+    {
+        fprintf(file, "%s", lines[i]);
+    }
+
+    fclose(file);
+}
+
+void removeExtraSpaces(char *str)
+{
+    int count = 0;
+    int i;
+
+    for (i = 0; str[i]; i++)
+    {
+        if (!isspace((unsigned char)str[i]) || (i > 0 && !isspace((unsigned char)str[i - 1])))
+        {
+            str[count++] = str[i];
+        }
+    }
+    str[count] = '\0';
 }

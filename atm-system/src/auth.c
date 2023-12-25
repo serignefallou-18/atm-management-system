@@ -1,6 +1,7 @@
 #include <termios.h>
 #include "header.h"
 
+
 char *USERS = "./data/users.txt";
 
 void loginMenu(char login[50], char pass[50])
