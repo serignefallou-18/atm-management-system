@@ -87,13 +87,13 @@ void updateAccount(struct User u)
         printf("\n\n\n\(2)-------->Country \n\t\t\t\t\t \n");
         scanf("%d", &choiceUpdate);
         ViderBuffer();
+        ligne = (2 * idaccount);
         switch (choiceUpdate)
         {
         case 1:
             printf("\n\n\n\t\t\t\t\t  Enter the new phone Number:");
             scanf("%d", &phone);
             ViderBuffer();
-            ligne = (2 * idaccount);
             updateField(ligne, phone, "");
             break;
         case 2:
@@ -221,14 +221,14 @@ void updateField(int ligne, int newPhoneNumber, char country[50])
             {
                 snprintf(valeur, sizeof(valeur), "%d %d %49s %d %d/%d/%d %49s %d %f %49s", ID, x, y, z, a, b, m, d, newPhoneNumber, f, g);
             }
-            if (newPhoneNumber == 0)
+            if (strcmp(country,"")!=0)
             {
                 snprintf(valeur, sizeof(valeur), "%d %d %49s %d %d/%d/%d %49s %d %f %49s", ID, x, y, z, a, b, m, country, e, f, g);
             }
         }
     }
     removeExtraSpaces(valeur);
-    printf(valeur);
+    printf("%d", ligne);
     if (ligne >= 0 && ligne < 1000)
     {
         snprintf(lines[ligne], 1000, "%s\n", valeur);
