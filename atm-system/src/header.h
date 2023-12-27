@@ -51,3 +51,4 @@ int existaccount(int idaccount,int iduser);
 void updateField(int ligne, int newPhoneNumber, char country[50]);
 void saveLinesToFile(char lines[1000][1000]);
 void removeExtraSpaces(char *str);
+void chackExistAccount(struct User u);

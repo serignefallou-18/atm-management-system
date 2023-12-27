@@ -29,6 +29,7 @@ void mainMenu(struct User u)
         updateAccount(u);
         break;
     case 3:
+        chackExistAccount(u);
         // student TODO : add your **Check the details of existing accounts** function
         // here
         break;

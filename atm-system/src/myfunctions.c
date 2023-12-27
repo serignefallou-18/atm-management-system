@@ -110,6 +110,10 @@ void updateAccount(struct User u)
     }
 }
 
+void chackExistAccount(struct User u){
+
+}
+
 int existaccount(int idaccount, int iduser)
 {
     FILE *fp;
@@ -175,7 +179,7 @@ void ViderBuffer()
     }
     if (cmp != 0)
     {
-        printf("invalid format il ne dois pas y avoir d'espace\n");
+        printf("format invalid instead format attending:\n");
         exit(1);
     }
 }
@@ -228,7 +232,7 @@ void updateField(int ligne, int newPhoneNumber, char country[50])
         }
     }
     removeExtraSpaces(valeur);
-    printf("%d", ligne);
+   
     if (ligne >= 0 && ligne < 1000)
     {
         snprintf(lines[ligne], 1000, "%s\n", valeur);
