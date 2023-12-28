@@ -1,8 +1,8 @@
-
 #include "stdio.h"
 #include "header.h"
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 
 void registration(struct User *u)
 {
@@ -110,8 +110,55 @@ void updateAccount(struct User u)
     }
 }
 
-void chackExistAccount(struct User u){
+void chackExistAccount(struct User u)
+{
+    struct Record r;
+    int idaccount;
+    // char tab[5][50];
+    int test;
+    double interet;
+    char *typeacount;
+    int date;
+    double amount;
 
+    system("clear");
+    printf("\t\t\t===== For checking existing account =====\n");
+input:
+    printf("\t\t\t===== please tape the id of the  account: ");
+    scanf("%d", &idaccount);
+    test = existaccount(idaccount, u.id);
+    if (test == 0)
+    {
+        printf("compte inexistant \n");
+        goto input;
+    }
+
+    typeacount = getaccounttype(idaccount, &date,&amount);
+   // printf("%s", typeacount);
+    if (strcmp(typeacount, "current") == 0)
+    {
+        printf("You will not get interests because the account is of type current\n");
+    }
+    else if ((strcmp(typeacount, "saving") == 0))
+    {
+        interet = round(((amount * 7) / 1200));
+        printf("You will get %.2f interest on day %d of every month", interet, date);
+    }
+    else if ((strcmp(typeacount, "fixed01") == 0))
+    {
+        interet = round(((amount * 4) / 1200));
+        printf("You will get %.2f interest on day %d of every month", interet, date);
+    }
+    else if ((strcmp(typeacount, "fixed02") == 0))
+    {
+        interet = round(((amount * 5) / 1200));
+        printf("You will get %.2f interest on day %d of every month", interet, date);
+    }
+    else if ((strcmp(typeacount, "fixed03") == 0))
+    {
+        interet = round(((amount * 8) / 1200));
+        printf("You will get %.2f interest on day %d of every month", interet, date);
+    }
 }
 
 int existaccount(int idaccount, int iduser)
@@ -225,14 +272,14 @@ void updateField(int ligne, int newPhoneNumber, char country[50])
             {
                 snprintf(valeur, sizeof(valeur), "%d %d %49s %d %d/%d/%d %49s %d %f %49s", ID, x, y, z, a, b, m, d, newPhoneNumber, f, g);
             }
-            if (strcmp(country,"")!=0)
+            if (strcmp(country, "") != 0)
             {
                 snprintf(valeur, sizeof(valeur), "%d %d %49s %d %d/%d/%d %49s %d %f %49s", ID, x, y, z, a, b, m, country, e, f, g);
             }
         }
     }
     removeExtraSpaces(valeur);
-   
+
     if (ligne >= 0 && ligne < 1000)
     {
         snprintf(lines[ligne], 1000, "%s\n", valeur);
@@ -247,6 +294,7 @@ void updateField(int ligne, int newPhoneNumber, char country[50])
 
 void saveLinesToFile(char lines[1000][1000])
 {
+    int taille = countLines("./data/records.txt");
     FILE *file = fopen("./data/records.txt", "w");
     if (file == NULL)
     {
@@ -254,7 +302,7 @@ void saveLinesToFile(char lines[1000][1000])
         exit(1);
     }
 
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < taille; i++)
     {
         fprintf(file, "%s", lines[i]);
     }
@@ -275,4 +323,30 @@ void removeExtraSpaces(char *str)
         }
     }
     str[count] = '\0';
+}
+
+char *getaccounttype(int id, int *date,double *amount)
+{
+    FILE *fp;
+    int ID, x, z, a, b, m, e;
+    char y[50], d[50], g[50];
+    float f;
+
+    if ((fp = fopen("./data/records.txt", "r")) == NULL)
+    {
+        printf("Erreur lors de l'ouverture du fichier");
+        exit(1);
+    }
+
+    while (fscanf(fp, "%d %d %49s %d %d/%d/%d %49s %d %f %49s",
+                  &ID, &x, y, &z, &a, &b, &m, d, &e, &f, g) == 11)
+    {
+        if (ID == id)
+        {
+           *date=a;
+           *amount= round(f * 100.0) / 100.0;
+           // r->accountType=g;
+            return strdup(g);
+        }
+    }
 }

@@ -1,7 +1,7 @@
 objects = src/main.o src/system.o src/auth.o src/myfunctions.o
 
 atm : $(objects)
-	cc -o atm $(objects)
+	cc -o atm $(objects) -lm
 
 main.o : src/header.h
 kbd.o : src/header.h
