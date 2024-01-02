@@ -17,6 +17,7 @@ void mainMenu(struct User u)
     printf("\n\t\t[7]- Transfer ownership\n");
     printf("\n\t\t[8]- Exit\n");
     scanf("%d", &option);
+    ViderBuffer();
 
     switch (option)
     {
@@ -29,7 +30,7 @@ void mainMenu(struct User u)
         updateAccount(u);
         break;
     case 3:
-        chackExistAccount(u);
+        checkExistAccount(u);
         // student TODO : add your **Check the details of existing accounts** function
         // here
         break;
@@ -37,12 +38,12 @@ void mainMenu(struct User u)
         checkAllAccounts(u);
         break;
     case 5:
-        // student TODO : add your **Make transaction** function
-        // here
+        maketransactin(u);
         break;
     case 6:
         // student TODO : add your **Remove existing account** function
         // here
+        removeaccount(u);
         break;
     case 7:
         // student TODO : add your **Transfer owner** function

@@ -190,3 +190,52 @@ void checkAllAccounts(struct User u)
     fclose(pf);
     success(u);
 }
+
+
+
+//recupèration de chaine de caractère qui se trouve dans mon strdup;
+
+char *my_strdup(const char *src) {
+    if (src == NULL) {
+        return NULL; // Gestion du cas où la source est NULL
+    }
+    size_t length = strlen(src) + 1; // Taille de la chaîne + 1 pour le caractère nul
+    char *dest = malloc(length); // Allocation de mémoire
+    if (dest == NULL) {
+        return NULL; // Gestion de l'échec d'allocation
+    }
+    strcpy(dest, src); // Copie de la chaîne source vers la mémoire allouée
+    return dest;
+}
+
+double getdeposit(int idaccount, int iduser, int *line){
+
+    FILE *fp;
+    int ID, x, a, b, m, e;
+    int z;
+    int numaccount;
+    char y[50], d[50], g[50];
+    float f;
+
+    if ((fp = fopen("./data/records.txt", "r")) == NULL)
+    {
+        printf("Erreur lors de l'ouverture du fichier");
+        exit(1);
+    }
+
+    while (fscanf(fp, "%d %d %49s %d %d/%d/%d %49s %d %f %49s",
+                  &ID, &x, y, &z, &a, &b, &m, d, &e, &f, g) == 11)
+    {
+        numaccount = (int)z;
+        if ((numaccount == idaccount) && iduser == x)
+        {
+            printf("%d", z);
+            *line = ID;
+            fclose(fp);
+            return f; // ID trouvé
+        }
+    }
+
+    fclose(fp);
+    return 0; // ID non trouvé
+}

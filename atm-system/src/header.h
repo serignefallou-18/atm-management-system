@@ -42,15 +42,20 @@ void checkAllAccounts(struct User u);
 void success(struct User u);
 
 
+
 //my own functions
 void registration(struct User *u);
 int countLines();
 void ViderBuffer();
 int getUserID(char username[50],char pass[50]);
 void updateAccount(struct User u);
-int existaccount(int idaccount,int iduser);
-void updateField(int ligne, int newPhoneNumber, char country[50]);
+int existaccount(int idaccount, int iduser, int *line);
+void updateField(int ligne, int newPhoneNumber, char *country, double deposit);
 void saveLinesToFile(char lines[1000][1000]);
 void removeExtraSpaces(char *str);
-void chackExistAccount(struct User u);
+void checkExistAccount(struct User u);
 char *getaccounttype(int id, int *date,double *amount);
+void maketransactin(struct User u);
+void updatedeposit(double deposit);
+double getdeposit(int idaccount, int iduser, int *line);
+void removeaccount(struct User u);

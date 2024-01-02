@@ -65,6 +65,7 @@ void updateAccount(struct User u)
     int phone;
     int ligne;
     char country[50];
+    int line;
     system("clear");
     printf("\n\n\n\t\t\t\t\t  Menu of update Account \n\t\t\t\t\t \n");
 
@@ -72,7 +73,7 @@ void updateAccount(struct User u)
     scanf("%d", &idaccount);
     ViderBuffer();
     //  printf("%d", idaccount);
-    test = existaccount(idaccount, u.id);
+    test = existaccount(idaccount, u.id, &line);
     if (test == 0)
     {
         printf("compte inexistant \n");
@@ -87,19 +88,20 @@ void updateAccount(struct User u)
         printf("\n\n\n\(2)-------->Country \n\t\t\t\t\t \n");
         scanf("%d", &choiceUpdate);
         ViderBuffer();
-        ligne = (2 * idaccount);
+        ligne = (2 * line);
         switch (choiceUpdate)
         {
         case 1:
             printf("\n\n\n\t\t\t\t\t  Enter the new phone Number:");
             scanf("%d", &phone);
             ViderBuffer();
-            updateField(ligne, phone, "");
+            updateField(ligne, phone, "", 0);
             break;
         case 2:
             printf("\n\n\n\t\t\t\t\t  Enter the new country:");
             scanf("%s", &country);
-            updateField(ligne, 0, country);
+            ViderBuffer();
+            updateField(ligne, 0, country, 0);
             break;
         default:
             printf("\n\n\n\t\t\t\t\tinvalid input");
@@ -110,7 +112,7 @@ void updateAccount(struct User u)
     }
 }
 
-void chackExistAccount(struct User u)
+void checkExistAccount(struct User u)
 {
     struct Record r;
     int idaccount;
@@ -120,51 +122,229 @@ void chackExistAccount(struct User u)
     char *typeacount;
     int date;
     double amount;
+    int line;
+    char chaine[50];
 
     system("clear");
-    printf("\t\t\t===== For checking existing account =====\n");
 input:
+    printf("\t\t\t===== For checking existing account =====\n");
     printf("\t\t\t===== please tape the id of the  account: ");
     scanf("%d", &idaccount);
-    test = existaccount(idaccount, u.id);
+    ViderBuffer();
+    test = existaccount(idaccount, u.id, &line);
     if (test == 0)
     {
         printf("compte inexistant \n");
         goto input;
     }
 
-    typeacount = getaccounttype(idaccount, &date,&amount);
-   // printf("%s", typeacount);
-    if (strcmp(typeacount, "current") == 0)
+    typeacount = getaccounttype(line, &date, &amount);
+    // typeacount="xxxxxxxx";
+    // printf("%s", typeacount);
+    strcpy(chaine, typeacount);
+    // printf("%s\n",chaine);
+    if (strcmp(chaine, "current") == 0)
     {
         printf("You will not get interests because the account is of type current\n");
     }
-    else if ((strcmp(typeacount, "saving") == 0))
+    else if ((strcmp(chaine, "saving") == 0))
     {
         interet = round(((amount * 7) / 1200));
         printf("You will get %.2f interest on day %d of every month", interet, date);
     }
-    else if ((strcmp(typeacount, "fixed01") == 0))
+    else if ((strcmp(chaine, "fixed01") == 0))
     {
         interet = round(((amount * 4) / 1200));
-        printf("You will get %.2f interest on day %d of every month", interet, date);
+        printf("You will get %.2f interest on day %d of every month", interet, date + 1);
     }
-    else if ((strcmp(typeacount, "fixed02") == 0))
+    else if ((strcmp(chaine, "fixed02") == 0))
     {
         interet = round(((amount * 5) / 1200));
-        printf("You will get %.2f interest on day %d of every month", interet, date);
+        printf("You will get %.2f interest on day %d of every month", interet, date + 2);
     }
-    else if ((strcmp(typeacount, "fixed03") == 0))
+    else if ((strcmp(chaine, "fixed03") == 0))
     {
         interet = round(((amount * 8) / 1200));
-        printf("You will get %.2f interest on day %d of every month", interet, date);
+        printf("You will get %.2f interest on day %d of every month", interet, date + 3);
     }
 }
 
-int existaccount(int idaccount, int iduser)
+void maketransactin(struct User u)
+{
+    int idaccount;
+    int choix;
+    int test;
+    int line;
+    double deposit, rising;
+    double extract;
+    double amount;
+    char *typeacount;
+    int date;
+input:
+
+    system("clear");
+    printf("\t\t\t===== menu for transactions =====\n");
+    printf("\t\t\t===== please tape the id of the  account: ");
+    scanf("%d", &idaccount);
+    ViderBuffer();
+    test = existaccount(idaccount, u.id, &line);
+    if (test == 0)
+    {
+        printf("compte inexistant \n");
+        goto input;
+    }
+    system("clear");
+    printf("\t\t\t=======================================\n\n\n");
+switching:
+    printf("\t\t\t  to withdrawing tape (1)\n");
+    printf("\t\t\t  To depose money tape (2)\n");
+    scanf("%d", &choix);
+    ViderBuffer();
+
+    typeacount = getaccounttype(line, &date, &amount);
+    if (strcmp(typeacount, "saving") != 0 && strcmp(typeacount, "current") != 0)
+    {
+        printf("error the type of this account not permit you this operation\n");
+        exit(1);
+    }
+
+    switch (choix)
+    {
+    case 1:
+        printf("\t\t\t rising: $ ");
+        scanf("%lf", &rising);
+        ViderBuffer();
+        if (amount < rising)
+        {
+            printf("solde insuffisant, ressayer svp\n");
+        }
+        else
+        {
+            updateField(2 * line, 0, "", rising * (-1));
+            success(u);
+            break;
+        }
+
+        //
+        break;
+    case 2:
+        printf("\t\t\tdéposit: $ ");
+        scanf("%lf", &deposit);
+        ViderBuffer();
+        // printf("%f",deposit);
+        updateField(2 * line, 0, "", deposit);
+        success(u);
+        break;
+
+    default:
+        printf("choice not disponnible");
+        goto switching;
+        break;
+    }
+}
+
+void removeaccount(struct User u)
+{
+    int test, line;
+    int idaccount;
+
+    FILE *file;
+    int ID, x, z, a, b, m, e;
+    char y[50], d[50], g[50];
+    // char cont[50]=*country;
+    float f;
+    int temp;
+    char valeur[1000];
+    char lines[1000][1000];
+    FILE *fp;
+    double totaldeposit;
+    int ligne;
+    system("clear");
+    printf("\t\t\t===== menu for transactions =====\n");
+input:
+    printf("\t\t\t===== please tape the id of the  account: ");
+    scanf("%d", &idaccount);
+    ViderBuffer();
+    test = existaccount(idaccount, u.id, &line);
+    if (test == 0)
+    {
+        printf("compte inexistant \n");
+        goto input;
+    }
+
+    ligne = 2 * line;
+    file = fopen("./data/records.txt", "r");
+
+    if (file == NULL)
+    {
+        printf("Erreur lors de l'ouverture du fichier");
+        exit(1);
+    }
+    printf("%d",ligne);
+
+    int currentLine = 0;
+   // int currentLine;
+    while (fgets(lines[currentLine], 1000, file) && currentLine < 1000)
+    {   
+        currentLine++;
+    }
+
+    fclose(file);
+    if ((fp = fopen("./data/records.txt", "r")) == NULL)
+    {
+        printf("Erreur lors de l'ouverture du fichier");
+        exit(1);
+    }
+
+    while (fscanf(fp, "%d %d %49s %d %d/%d/%d %49s %d %f %49s",
+                  &ID, &x, y, &z, &a, &b, &m, d, &e, &f, g) == 11)
+    {
+        temp++;
+        if ((ID * 2) == ligne)
+        {
+
+            snprintf(valeur, sizeof(valeur), "%d %d %49s %d %d/%d/%d %49s %d %f %49s", ID, x, y, z, a, b, m, d, e, f, g);
+        }
+    }
+    fclose(fp);
+    removeExtraSpaces(valeur);
+
+    if (ligne >= 0 && ligne < 1000)
+    {
+        snprintf(lines[ligne], 1000, "%s\n", valeur);
+    }
+    else
+    {
+        printf("Numéro de ligne invalide.\n");
+        exit(1);
+    }
+    int taille = countLines("./data/records.txt");
+    FILE *fil = fopen("./data/records.txt", "w");
+    if (file == NULL)
+    {
+        printf("Impossible d'écrire dans le fichier.\n");
+        exit(1);
+    }
+
+    for (int i = 0; i < taille; i++)
+    {
+        if (i==ligne){
+            i++;
+            continue;
+        }
+        fprintf(fil, "%s", lines[i]);
+    }
+
+    fclose(file);
+    success(u);
+}
+
+int existaccount(int idaccount, int iduser, int *line)
 {
     FILE *fp;
-    int ID, x, z, a, b, m, e;
+    int ID, x, a, b, m, e;
+    int z;
+    int numaccount;
     char y[50], d[50], g[50];
     float f;
 
@@ -177,8 +357,11 @@ int existaccount(int idaccount, int iduser)
     while (fscanf(fp, "%d %d %49s %d %d/%d/%d %49s %d %f %49s",
                   &ID, &x, y, &z, &a, &b, &m, d, &e, &f, g) == 11)
     {
-        if ((ID == idaccount) && iduser == x)
+        numaccount = (int)z;
+        if ((numaccount == idaccount) && iduser == x)
         {
+            printf("%d", z);
+            *line = ID;
             fclose(fp);
             return 1; // ID trouvé
         }
@@ -231,16 +414,18 @@ void ViderBuffer()
     }
 }
 
-void updateField(int ligne, int newPhoneNumber, char country[50])
+void updateField(int ligne, int newPhoneNumber, char *country, double deposit)
 {
     FILE *file;
     int ID, x, z, a, b, m, e;
     char y[50], d[50], g[50];
+    // char cont[50]=*country;
     float f;
     int temp;
     char valeur[1000];
     char lines[1000][1000];
     FILE *fp;
+    double totaldeposit;
 
     file = fopen("./data/records.txt", "r");
 
@@ -268,13 +453,18 @@ void updateField(int ligne, int newPhoneNumber, char country[50])
         temp++;
         if ((ID * 2) == ligne)
         {
-            if (country == "")
+            if ((country == "") && deposit == 0)
             {
                 snprintf(valeur, sizeof(valeur), "%d %d %49s %d %d/%d/%d %49s %d %f %49s", ID, x, y, z, a, b, m, d, newPhoneNumber, f, g);
             }
-            if (strcmp(country, "") != 0)
+            if ((strcmp(country, "") != 0) && deposit == 0)
             {
                 snprintf(valeur, sizeof(valeur), "%d %d %49s %d %d/%d/%d %49s %d %f %49s", ID, x, y, z, a, b, m, country, e, f, g);
+            }
+            else if (deposit != 0)
+            {
+                totaldeposit = deposit + f;
+                snprintf(valeur, sizeof(valeur), "%d %d %49s %d %d/%d/%d %49s %d %f %49s", ID, x, y, z, a, b, m, d, e, totaldeposit, g);
             }
         }
     }
@@ -325,7 +515,7 @@ void removeExtraSpaces(char *str)
     str[count] = '\0';
 }
 
-char *getaccounttype(int id, int *date,double *amount)
+char *getaccounttype(int id, int *date, double *amount)
 {
     FILE *fp;
     int ID, x, z, a, b, m, e;
@@ -343,10 +533,13 @@ char *getaccounttype(int id, int *date,double *amount)
     {
         if (ID == id)
         {
-           *date=a;
-           *amount= round(f * 100.0) / 100.0;
-           // r->accountType=g;
+            *date = a;
+            *amount = round(f * 100.0) / 100.0;
+            // r->accountType=g;
             return strdup(g);
+            // return NULL;
         }
     }
+    fclose(fp); // N'oubliez pas de fermer le fichier après utilisation
+    return NULL;
 }
