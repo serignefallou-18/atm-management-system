@@ -59,3 +59,5 @@ void maketransactin(struct User u);
 void updatedeposit(double deposit);
 double getdeposit(int idaccount, int iduser, int *line);
 void removeaccount(struct User u);
+void makeowntransfer(struct User u);
+int existUser(char  *nome);

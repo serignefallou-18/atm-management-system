@@ -130,10 +130,10 @@ input:
     printf("\t\t\t===== For checking existing account =====\n");
     printf("\t\t\t===== please tape the id of the  account: ");
     scanf("%d", &idaccount);
-    //printf("%d",idaccount);
+    // printf("%d",idaccount);
     ViderBuffer();
     test = existaccount(idaccount, u.id, &line);
-    //printf("%d",test);
+    // printf("%d",test);
     if (test == 0)
     {
         printf("compte inexistant \n");
@@ -246,6 +246,7 @@ switching:
 }
 
 void removeaccount(struct User u)
+
 {
     int test, line;
     int idaccount;
@@ -282,12 +283,12 @@ input:
         printf("Erreur lors de l'ouverture du fichier");
         exit(1);
     }
-    printf("%d",ligne);
+    printf("%d", ligne);
 
     int currentLine = 0;
-   // int currentLine;
+    // int currentLine;
     while (fgets(lines[currentLine], 1000, file) && currentLine < 1000)
-    {   
+    {
         currentLine++;
     }
 
@@ -313,7 +314,7 @@ input:
 
     if (ligne >= 0 && ligne < 1000)
     {
-        int len=snprintf(NULL,0,"%s\n\n",valeur);
+        int len = snprintf(NULL, 0, "%s\n\n", valeur);
         snprintf(lines[ligne], len, "%s\n", valeur);
     }
     else
@@ -331,7 +332,8 @@ input:
 
     for (int i = 0; i < taille; i++)
     {
-        if (i==ligne){
+        if (i == ligne)
+        {
             i++;
             continue;
         }
@@ -341,12 +343,39 @@ input:
     fclose(file);
     success(u);
 }
+void makeowntransfer(struct User u)
+{
+    int idaccount,line,ligne;
+    char *usernw;
+    system("clear");
+    printf("\t\t\t===== Transfert ownship=====\n");
+input:
+    printf("\t\t\t===== please tape the id of the  account: ");
+    scanf("%d",idaccount);
+    ViderBuffer();
+    int test=existaccount(idaccount,u.id,&line);
+     if (test == 0)
+    {
+        printf("compte inexistant \n");
+        goto input;
+    }
 
+    ligne = 2 * line;
+    printf("\t\t\t===== name of the the new user of this account: ");
+    scanf("%s",usernw);
+    ViderBuffer();
+    int test2=existUser(usernw);
+    if (test2!=1){
+        printf("useranme does not exist\n");
+        exit(1);
+    }
+
+}
 int existaccount(int idaccount, int iduser, int *line)
 {
     FILE *fp;
     int ID, x, a, b, m, e;
-    int z,temp;
+    int z, temp;
     int numaccount;
     char y[50], d[50], g[50];
     float f;
@@ -360,18 +389,18 @@ int existaccount(int idaccount, int iduser, int *line)
     while (fscanf(fp, "%d %d %49s %d %d/%d/%d %49s %d %f %49s",
                   &ID, &x, y, &z, &a, &b, &m, d, &e, &f, g) == 11)
     {
-        //temp++;
-        printf("%d\n",z);
-        //numaccount = (int)z;
-        if ((idaccount=z) && iduser == x)
+        // temp++;
+        printf("%d\n", z);
+        // numaccount = (int)z;
+        if ((idaccount = z) && iduser == x)
         {
-            //printf("%d", z);
+            // printf("%d", z);
             *line = ID;
             fclose(fp);
             return 1; // ID trouvé
         }
     }
-    //printf("%d",temp);
+    // printf("%d",temp);
 
     fclose(fp);
     return 0; // ID non trouvé
@@ -478,7 +507,7 @@ void updateField(int ligne, int newPhoneNumber, char *country, double deposit)
 
     if (ligne >= 0 && ligne < 1000)
     {
-       int len=snprintf(NULL,0,"%s\n\n",valeur);
+        int len = snprintf(NULL, 0, "%s\n\n", valeur);
         snprintf(lines[ligne], len, "%s\n", valeur);
     }
     else
@@ -549,4 +578,28 @@ char *getaccounttype(int id, int *date, double *amount)
     }
     fclose(fp); // N'oubliez pas de fermer le fichier après utilisation
     return NULL;
+}
+
+int existuser(char *nom){
+    FILE *fp;
+    int userID;
+    char name[50], password[50]; // Assurez-vous que ces tailles sont adaptées à votre fichier
+
+    if ((fp = fopen("./data/users.txt", "r")) == NULL)
+    {
+        printf("Error! opening file");
+        exit(1);
+    }
+
+    while (fscanf(fp, "%d %49s %49s", &userID, name, password) ==3)
+    {
+        if (strcmp(name, nom) == 0)
+        {
+            fclose(fp);
+            return 1;
+        }
+    }
+
+    fclose(fp);
+    return -1;
 }
