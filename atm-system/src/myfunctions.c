@@ -64,7 +64,7 @@ void updateAccount(struct User u)
     int choiceUpdate;
     int phone;
     int ligne;
-    char country[50];
+    char *country;
     int line;
     system("clear");
     printf("\n\n\n\t\t\t\t\t  Menu of update Account \n\t\t\t\t\t \n");
@@ -99,7 +99,7 @@ void updateAccount(struct User u)
             break;
         case 2:
             printf("\n\n\n\t\t\t\t\t  Enter the new country:");
-            scanf("%s", &country);
+            scanf("%s", country);
             ViderBuffer();
             updateField(ligne, 0, country, 0);
             break;
@@ -130,8 +130,10 @@ input:
     printf("\t\t\t===== For checking existing account =====\n");
     printf("\t\t\t===== please tape the id of the  account: ");
     scanf("%d", &idaccount);
+    //printf("%d",idaccount);
     ViderBuffer();
     test = existaccount(idaccount, u.id, &line);
+    //printf("%d",test);
     if (test == 0)
     {
         printf("compte inexistant \n");
@@ -311,7 +313,8 @@ input:
 
     if (ligne >= 0 && ligne < 1000)
     {
-        snprintf(lines[ligne], 1000, "%s\n", valeur);
+        int len=snprintf(NULL,0,"%s\n\n",valeur);
+        snprintf(lines[ligne], len, "%s\n", valeur);
     }
     else
     {
@@ -343,7 +346,7 @@ int existaccount(int idaccount, int iduser, int *line)
 {
     FILE *fp;
     int ID, x, a, b, m, e;
-    int z;
+    int z,temp;
     int numaccount;
     char y[50], d[50], g[50];
     float f;
@@ -357,15 +360,18 @@ int existaccount(int idaccount, int iduser, int *line)
     while (fscanf(fp, "%d %d %49s %d %d/%d/%d %49s %d %f %49s",
                   &ID, &x, y, &z, &a, &b, &m, d, &e, &f, g) == 11)
     {
-        numaccount = (int)z;
-        if ((numaccount == idaccount) && iduser == x)
+        //temp++;
+        printf("%d\n",z);
+        //numaccount = (int)z;
+        if ((idaccount=z) && iduser == x)
         {
-            printf("%d", z);
+            //printf("%d", z);
             *line = ID;
             fclose(fp);
             return 1; // ID trouvé
         }
     }
+    //printf("%d",temp);
 
     fclose(fp);
     return 0; // ID non trouvé
@@ -472,7 +478,8 @@ void updateField(int ligne, int newPhoneNumber, char *country, double deposit)
 
     if (ligne >= 0 && ligne < 1000)
     {
-        snprintf(lines[ligne], 1000, "%s\n", valeur);
+       int len=snprintf(NULL,0,"%s\n\n",valeur);
+        snprintf(lines[ligne], len, "%s\n", valeur);
     }
     else
     {
