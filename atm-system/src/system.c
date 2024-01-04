@@ -46,6 +46,7 @@ void stayOrReturn(int notGood, void f(struct User u), struct User u)
     invalid:
         printf("\nEnter 0 to try again, 1 to return to main menu and 2 to exit:");
         scanf("%d", &option);
+        ViderBuffer();
         if (option == 0)
             f(u);
         else if (option == 1)
@@ -62,6 +63,7 @@ void stayOrReturn(int notGood, void f(struct User u), struct User u)
     {
         printf("\nEnter 1 to go to the main menu and 0 to exit:");
         scanf("%d", &option);
+        ViderBuffer();
     }
     if (option == 1)
     {

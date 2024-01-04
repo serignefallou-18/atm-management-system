@@ -345,31 +345,93 @@ input:
 }
 void makeowntransfer(struct User u)
 {
-    int idaccount,line,ligne;
-    char *usernw;
+
+    FILE *file;
+    int ID, x, z, a, b, m, e;
+    char y[50], d[50], g[50];
+    // char cont[50]=*country;
+    float f;
+    int temp;
+    char valeur[1000];
+    char lines[1000][1000];
+    FILE *fp;
+    double totaldeposit;
+    int idaccount, line, ligne;
+    char usernw[50];
     system("clear");
     printf("\t\t\t===== Transfert ownship=====\n");
 input:
     printf("\t\t\t===== please tape the id of the  account: ");
-    scanf("%d",idaccount);
+    scanf("%d", &idaccount);
     ViderBuffer();
-    int test=existaccount(idaccount,u.id,&line);
-     if (test == 0)
+    int test = existaccount(idaccount, u.id, &line);
+    printf("%d\n",idaccount);
+    printf("%d\n",line);
+    printf("%d\n",ligne);
+    if (test == 0)
     {
         printf("compte inexistant \n");
         goto input;
     }
 
     ligne = 2 * line;
+    printf("%d",ligne);
     printf("\t\t\t===== name of the the new user of this account: ");
-    scanf("%s",usernw);
+    scanf("%s", &usernw);
     ViderBuffer();
-    int test2=existUser(usernw);
-    if (test2!=1){
+    int nwid = existuser(usernw);
+    if (nwid == -1)
+    {
         printf("useranme does not exist\n");
         exit(1);
     }
 
+    file = fopen("./data/records.txt", "r");
+
+    if (file == NULL)
+    {
+        printf("Erreur lors de l'ouverture du fichier");
+        exit(1);
+    }
+
+    int currentLine = 0;
+    while (fgets(lines[currentLine], 1000, file) && currentLine < 1000)
+    {
+        currentLine++;
+    }
+
+    fclose(file);
+
+    if ((fp = fopen("./data/records.txt", "r")) == NULL)
+    {
+        printf("Erreur lors de l'ouverture du fichier");
+        exit(1);
+    }
+
+
+    while (fscanf(fp, "%d %d %49s %d %d/%d/%d %49s %d %f %49s",
+                  &ID, &x, y, &z, &a, &b, &m, d, &e, &f, g) == 11)
+    {
+        if ((ID * 2) == ligne)
+        {
+            snprintf(valeur, sizeof(valeur), "%d %d %49s %d %d/%d/%d %49s %d %f %49s", ID, nwid, usernw, z, a, b, m, d, e, f, g);
+        }
+    }
+    fclose(fp);
+    removeExtraSpaces(valeur);
+
+    if (ligne >= 0 && ligne < 1000)
+    {
+        int len = snprintf(NULL, 0, "%s\n\n", valeur);
+        snprintf(lines[ligne], len, "%s\n", valeur);
+    }
+    else
+    {
+        printf("Numéro de ligne invalide.\n");
+        exit(1);
+    }
+    saveLinesToFile(lines);
+    success(u);
 }
 int existaccount(int idaccount, int iduser, int *line)
 {
@@ -390,7 +452,7 @@ int existaccount(int idaccount, int iduser, int *line)
                   &ID, &x, y, &z, &a, &b, &m, d, &e, &f, g) == 11)
     {
         // temp++;
-        printf("%d\n", z);
+        //printf("%d\n", z);
         // numaccount = (int)z;
         if ((idaccount = z) && iduser == x)
         {
@@ -580,7 +642,8 @@ char *getaccounttype(int id, int *date, double *amount)
     return NULL;
 }
 
-int existuser(char *nom){
+int existuser(char *nom)
+{
     FILE *fp;
     int userID;
     char name[50], password[50]; // Assurez-vous que ces tailles sont adaptées à votre fichier
@@ -591,12 +654,12 @@ int existuser(char *nom){
         exit(1);
     }
 
-    while (fscanf(fp, "%d %49s %49s", &userID, name, password) ==3)
+    while (fscanf(fp, "%d %49s %49s", &userID, name, password) == 3)
     {
         if (strcmp(name, nom) == 0)
         {
             fclose(fp);
-            return 1;
+            return userID;
         }
     }
 

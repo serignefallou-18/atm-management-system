@@ -40,6 +40,7 @@ void createNewAcc(struct User u);
 void mainMenu(struct User u);
 void checkAllAccounts(struct User u);
 void success(struct User u);
+void stayOrReturn(int notGood, void f(struct User u), struct User u);
 
 
 
@@ -60,4 +61,4 @@ void updatedeposit(double deposit);
 double getdeposit(int idaccount, int iduser, int *line);
 void removeaccount(struct User u);
 void makeowntransfer(struct User u);
-int existUser(char  *nome);
+int existuser(char *nom);
