@@ -82,7 +82,9 @@ void initMenu(struct User *u)
             {
             case 1:
                 loginMenu(u->name, u->password);
-                if (strcmp(u->password, getPassword(*u)) == 0)
+                char *chiff=chiffrementCesar(u->password,3);
+                printf("%s",getPassword(*u));
+                if (strcmp(chiff, getPassword(*u)) == 0)
                 {  
 
                     printf("\n\nPassword Match!");

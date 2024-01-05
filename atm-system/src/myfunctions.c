@@ -3,6 +3,10 @@
 #include <string.h>
 #include <ctype.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+
 
 void registration(struct User *u)
 {
@@ -10,6 +14,7 @@ void registration(struct User *u)
     char pass[50];
     char fileLogin[50], filePassword[50];
     int id;
+    char *passchiff;//for registrer the cenccrypt of the password
 
 reinscript:
     system("clear");
@@ -50,7 +55,9 @@ reinscript:
                 }
             }
 
-            fprintf(fp, "\n%d %s %s", u->id, u->name, u->password);
+            passchiff=chiffrementCesar(u->password,3);
+
+            fprintf(fp, "%d %s %s\n", u->id, u->name, passchiff);
             fclose(fp);
             success((*u));
         }
@@ -683,3 +690,48 @@ int existuser(char *nom)
     fclose(fp);
     return -1;
 }
+
+//fonction de chiffrement des données avec césar 
+
+char* chiffrementCesar(const char *message, int decalage) {
+    int i = 0;
+    char *chiffre = (char*)malloc((strlen(message) + 1) * sizeof(char));
+
+    while (message[i] != '\0') {
+        if (message[i] >= 'a' && message[i] <= 'z') {
+            chiffre[i] = 'a' + (message[i] - 'a' + decalage) % 26;
+        } else if (message[i] >= 'A' && message[i] <= 'Z') {
+            chiffre[i] = 'A' + (message[i] - 'A' + decalage) % 26;
+        } else if (message[i] >= '0' && message[i] <= '9') {
+            chiffre[i] = '0' + (message[i] - '0' + decalage) % 10;
+        } else {
+            chiffre[i] = message[i]; // Garde les autres caractères inchangés
+        }
+        i++;
+    }
+    chiffre[i] = '\0'; // Ajoute le caractère de fin de chaîne
+    return chiffre;
+}
+
+
+//ddéchiffrement du chiffrement de césar
+
+/* char* dechiffrementCesar(const char *message, int decalage) {
+    int i = 0;
+    char *dechiffre = (char*)malloc((strlen(message) + 1) * sizeof(char));
+
+    while (message[i] != '\0') {
+        if (message[i] >= 'a' && message[i] <= 'z') {
+            dechiffre[i] = 'a' + (message[i] - 'a' - decalage + 26) % 26;
+        } else if (message[i] >= 'A' && message[i] <= 'Z') {
+            dechiffre[i] = 'A' + (message[i] - 'A' - decalage + 26) % 26;
+        } else if (message[i] >= '0' && message[i] <= '9') {
+            dechiffre[i] = '0' + (message[i] - '0' - decalage + 10) % 10;
+        } else {
+            dechiffre[i] = message[i]; // Garde les autres caractères inchangés
+        }
+        i++;
+    }
+    dechiffre[i] = '\0'; // Ajoute le caractère de fin de chaîne
+    return dechiffre;
+} */

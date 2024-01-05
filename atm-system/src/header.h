@@ -62,3 +62,4 @@ double getdeposit(int idaccount, int iduser, int *line);
 void removeaccount(struct User u);
 void makeowntransfer(struct User u);
 int existuser(char *nom);
+char* chiffrementCesar(const char *message, int decalage);
