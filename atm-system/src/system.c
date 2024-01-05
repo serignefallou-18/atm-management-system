@@ -106,25 +106,46 @@ void createNewAcc(struct User u)
     struct Record r;
     struct Record cr;
     char userName[50];
+    int year, month, day;
     FILE *pf = fopen(RECORDS, "a+");
     struct tm *info;
 
-noAccount:
     system("clear");
     printf("\t\t\t===== New record =====\n");
+noAccount:
     r.id = countLines("./data/records.txt") / 2;
 
-    //automaatisation de la date
+    // automaatisation de la date
     time(&timestamp);
     info = localtime(&timestamp);
-    r.deposit.month=info->tm_mon + 1;
-    r.deposit.day=info->tm_mday;
-    r.deposit.year=info->tm_year + 1900;
+    month = info->tm_mon + 1;
+    day = info->tm_mday;
+    year = info->tm_year + 1900;
 
+    printf("\nEnter today's date(mm/dd/yyyy):");
+    scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
+    ViderBuffer();
+    if ((r.deposit.year > year))
+    {
+        printf("year invalid");
+        goto noAccount;
+    }
 
-    // printf("\nEnter today's date(mm/dd/yyyy):");
-    // scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
-    // ViderBuffer();
+    if ((r.deposit.year == year) && (r.deposit.month > month) || (r.deposit.month > 12))
+    {
+        printf("month invalid");
+        goto noAccount;
+    }
+    if ((r.deposit.year == year) && (r.deposit.month <= month) && (r.deposit.day > day) || (r.deposit.day > 31))
+    {
+        printf("day invalid");
+        goto noAccount;
+    }
+    if ((r.deposit.month== 2) && (r.deposit.day > 29))
+    {
+        printf("day invalid");
+        goto noAccount;
+    }
     printf("\nEnter the account number:");
     scanf("%d", &r.accountNbr);
     ViderBuffer();
@@ -149,13 +170,14 @@ noAccount:
 typeAccount:
     printf("\nChoose the type of account:\n\t-> saving\n\t-> current\n\t-> fixed01(for 1 year)\n\t-> fixed02(for 2 years)\n\t-> fixed03(for 3 years)\n\n\tEnter your choice:");
     scanf("%s", r.accountType);
-   // printf(r.accountType);
-    if ((strcmp(r.accountType, "saving")==0)&&(strcmp(r.accountType, "current")==0)&&(strcmp(r.accountType, "fixed01")==0)&&(strcmp(r.accountType, "fixed02")==0)&&(strcmp(r.accountType, "fixed03")==0)){
+    ViderBuffer();
+    // printf(r.accountType);
+    if ((strcmp(r.accountType, "saving") == 0) && (strcmp(r.accountType, "current") == 0) && (strcmp(r.accountType, "fixed01") == 0) && (strcmp(r.accountType, "fixed02") == 0) && (strcmp(r.accountType, "fixed03") == 0))
+    {
         printf("choix non disponnible");
         goto typeAccount;
     }
- 
-    
+
     ViderBuffer();
     printf("%d", u.id);
     saveAccountToFile(pf, u, r);
@@ -193,24 +215,8 @@ void checkAllAccounts(struct User u)
     success(u);
 }
 
-
-
-//recupèration de chaine de caractère qui se trouve dans mon strdup;
-
-char *my_strdup(const char *src) {
-    if (src == NULL) {
-        return NULL; // Gestion du cas où la source est NULL
-    }
-    size_t length = strlen(src) + 1; // Taille de la chaîne + 1 pour le caractère nul
-    char *dest = malloc(length); // Allocation de mémoire
-    if (dest == NULL) {
-        return NULL; // Gestion de l'échec d'allocation
-    }
-    strcpy(dest, src); // Copie de la chaîne source vers la mémoire allouée
-    return dest;
-}
-
-double getdeposit(int idaccount, int iduser, int *line){
+double getdeposit(int idaccount, int iduser, int *line)
+{
 
     FILE *fp;
     int ID, x, a, b, m, e;

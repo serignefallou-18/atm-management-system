@@ -5,6 +5,7 @@
 void mainMenu(struct User u)
 {
     int option;
+    int c;
     system("clear");
     printf("\n\n\t\t======= ATM =======\n\n");
     printf("\n\t\t-->> Feel free to choose one of the options below <<--\n");
@@ -16,9 +17,9 @@ void mainMenu(struct User u)
     printf("\n\t\t[6]- Remove existing account\n");
     printf("\n\t\t[7]- Transfer ownership\n");
     printf("\n\t\t[8]- Exit\n");
+swithc:
     scanf("%d", &option);
-    ViderBuffer();
-
+    //ViderBuffer();
     switch (option)
     {
     case 1:
@@ -54,7 +55,9 @@ void mainMenu(struct User u)
         exit(1);
         break;
     default:
+        while ((c = getchar()) != '\n' && c != EOF);       
         printf("Invalid operation!\n");
+        goto swithc;
     }
 };
 

@@ -64,9 +64,9 @@ void updateAccount(struct User u)
     int choiceUpdate;
     int phone;
     int ligne;
-    char *country;
+    char country[50];
     int line;
-    system("clear");
+   system("clear");
     printf("\n\n\n\t\t\t\t\t  Menu of update Account \n\t\t\t\t\t \n");
 
     printf("\n\n\n\t\t\t\t\t  enter the id of the account: ");
@@ -120,15 +120,15 @@ void checkExistAccount(struct User u)
     int test;
     double interet;
     char *typeacount;
-    int date;
+    int date;;
     double amount;
     int line;
     char chaine[50];
 
     system("clear");
 input:
-    printf("\t\t\t===== For checking existing account =====\n");
-    printf("\t\t\t===== please tape the id of the  account: ");
+    printf("\t\t\t===== For checking existing account =====\n\n\n");
+    printf("\t\t\t===== please tape the id of the  account:\n\n\n\n\n\n ");
     scanf("%d", &idaccount);
     // printf("%d",idaccount);
     ViderBuffer();
@@ -147,27 +147,33 @@ input:
     // printf("%s\n",chaine);
     if (strcmp(chaine, "current") == 0)
     {
-        printf("You will not get interests because the account is of type current\n");
+        printf("\t\t\t\tYou will not get interests because the account is of type current\n\n");
+        success(u);
     }
     else if ((strcmp(chaine, "saving") == 0))
     {
         interet = round(((amount * 7) / 1200));
-        printf("You will get %.2f interest on day %d of every month", interet, date);
+        printf("\t\t\t\tYou will get %.2f interest on day %d of every month\n\n", interet, date);
+        success(u);
     }
     else if ((strcmp(chaine, "fixed01") == 0))
     {
         interet = round(((amount * 4) / 1200));
-        printf("You will get %.2f interest on day %d of every month", interet, date + 1);
+        printf("\t\t\t\tYou will get %.2f interest on day %d of every month\n\n", interet, date + 1);
+        success(u);
     }
     else if ((strcmp(chaine, "fixed02") == 0))
     {
         interet = round(((amount * 5) / 1200));
-        printf("You will get %.2f interest on day %d of every month", interet, date + 2);
+        printf("\t\t\t\tYou will get %.2f interest on day %d of every month\n\n", interet, date + 2);
+        success(u);
     }
     else if ((strcmp(chaine, "fixed03") == 0))
     {
         interet = round(((amount * 8) / 1200));
-        printf("You will get %.2f interest on day %d of every month", interet, date + 3);
+        
+        printf("\t\t\t\tYou will get %.2f interest on day %d of every month\n\n", interet, date + 3);
+        success(u);
     }
 }
 
@@ -213,12 +219,12 @@ switching:
     switch (choix)
     {
     case 1:
-        printf("\t\t\t rising: $ ");
+        printf("\t\t\t withdraw: $ ");
         scanf("%lf", &rising);
         ViderBuffer();
         if (amount < rising)
         {
-            printf("solde insuffisant, ressayer svp\n");
+            printf("solde not permit this operation, try again\n");
         }
         else
         {
@@ -239,7 +245,7 @@ switching:
         break;
 
     default:
-        printf("choice not disponnible");
+        printf("choice not available");
         goto switching;
         break;
     }
@@ -367,7 +373,7 @@ input:
     int test = existaccount(idaccount, u.id, &line);
     printf("%d\n",idaccount);
     printf("%d\n",line);
-    printf("%d\n",ligne);
+    //printf("%d\n",ligne);
     if (test == 0)
     {
         printf("compte inexistant \n");
@@ -377,7 +383,7 @@ input:
     ligne = 2 * line;
     printf("%d",ligne);
     printf("\t\t\t===== name of the the new user of this account: ");
-    scanf("%s", &usernw);
+    scanf("%s", usernw);
     ViderBuffer();
     int nwid = existuser(usernw);
     if (nwid == -1)
@@ -434,6 +440,7 @@ input:
     success(u);
 }
 int existaccount(int idaccount, int iduser, int *line)
+
 {
     FILE *fp;
     int ID, x, a, b, m, e;
@@ -441,6 +448,8 @@ int existaccount(int idaccount, int iduser, int *line)
     int numaccount;
     char y[50], d[50], g[50];
     float f;
+
+    //printf("-----------------------------%d---------------",idaccount);
 
     if ((fp = fopen("./data/records.txt", "r")) == NULL)
     {
@@ -454,9 +463,10 @@ int existaccount(int idaccount, int iduser, int *line)
         // temp++;
         //printf("%d\n", z);
         // numaccount = (int)z;
-        if ((idaccount = z) && iduser == x)
+        if ((idaccount == z) && iduser == x)
         {
-            // printf("%d", z);
+           
+           //printf("---------------%d------%d", z,ID);
             *line = ID;
             fclose(fp);
             return 1; // ID trouvé
@@ -631,6 +641,13 @@ char *getaccounttype(int id, int *date, double *amount)
     {
         if (ID == id)
         {
+            printf("\t\t\t\t-----------------------------------------------------\n");
+            printf("\t\t\t\tAccount number: %d\n",z);
+            printf("\t\t\t\tDeposit Date: %d/%d/%d\n", a, b, m);
+            printf("\t\t\t\tPhone Number: %d\n",e);
+            printf("\t\t\t\tAmount deposited: %.2f\n",f);
+            printf("\t\t\t\tType of account: %s\n",g);
+            printf("\t\t\t\t---------------------------------------------------\n\n\n");
             *date = a;
             *amount = round(f * 100.0) / 100.0;
             // r->accountType=g;
