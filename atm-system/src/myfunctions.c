@@ -5,7 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-
+//#include <sqlite3.h>
 
 
 void registration(struct User *u)
@@ -59,6 +59,10 @@ reinscript:
 
             fprintf(fp, "%d %s %s\n", u->id, u->name, passchiff);
             fclose(fp);
+            char sql_command[500];
+            snprintf(sql_command, sizeof(sql_command), "sqlite3 ./db/atm.db \"INSERT INTO users(login, password) VALUES('%s', '%s');\"", u->name, passchiff);
+            //printf("%s",sql_command);
+            system(sql_command);
             success((*u));
         }
     }
