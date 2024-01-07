@@ -35,12 +35,12 @@ void saveAccountToFile(FILE *ptr, struct User u, struct Record r)
             r.amount,
             r.accountType);
     
-    char date[11]; // Chaîne pour stocker la date YYYY-MM-DD (10 caractères pour la date + 1 pour le caractère nul)
+    char date[200]; // Chaîne pour stocker la date YYYY-MM-DD (10 caractères pour la date + 1 pour le caractère nul)
     snprintf(date, sizeof(date), "%04d-%02d-%02d", r.deposit.year, r.deposit.month, r.deposit.day);
 
 
     char sql_command[500];
-    snprintf(sql_command, sizeof(sql_command), "sqlite3 ./db/atm.db \"INSERT INTO records(idaccount, login, ussername, datecreation, contry, phone, balance, type) VALUES('%s', '%s');\"",r.accountNbr, (&u)->name, (&u)->name, date, r.country, r.phone, r.amount, r.accountType);
+    snprintf(sql_command, sizeof(sql_command), "sqlite3 ./db/atm.db \"INSERT INTO records(idaccount, login, ussername, datecreation, country, phone, balance, type) VALUES('%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s');\"",r.accountNbr, (&u)->name, (&u)->name, date, r.country, r.phone, (int)r.amount, r.accountType);
     printf("%s",sql_command);
     system(sql_command);
 }
@@ -181,14 +181,14 @@ typeAccount:
     scanf("%s", r.accountType);
     ViderBuffer();
     // printf(r.accountType);
-    if ((strcmp(r.accountType, "saving") == 0) && (strcmp(r.accountType, "current") == 0) && (strcmp(r.accountType, "fixed01") == 0) && (strcmp(r.accountType, "fixed02") == 0) && (strcmp(r.accountType, "fixed03") == 0))
+    if ((strcmp(r.accountType, "saving") != 0) && (strcmp(r.accountType, "current") != 0) && (strcmp(r.accountType, "fixed01") != 0) && (strcmp(r.accountType, "fixed02") != 0) && (strcmp(r.accountType, "fixed03") != 0))
     {
-        printf("choix non disponnible");
+        printf("choice not available");
         goto typeAccount;
     }
 
-    ViderBuffer();
-    printf("%d", u.id);
+    //ViderBuffer();
+    //printf("%d", u.id);
     saveAccountToFile(pf, u, r);
 
     fclose(pf);
