@@ -89,6 +89,7 @@ void initMenu(struct User *u)
 
                     printf("\n\nPassword Match!");
                     u->id=getUserID(u->name,u->password);
+                    printf("%d",u->id);
                 }
                 else
                 {

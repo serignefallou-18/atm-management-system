@@ -43,7 +43,7 @@ reinscript:
         }
         else
         {
-            u->id = countLines("./data/users.txt") + 1;
+            u->id = countLines("./data/users.txt");
             while (fscanf(fp, "%d %49s %49s", &id, fileLogin, filePassword) == 3)
             {
                 // Comparaison des logins et mots de passe

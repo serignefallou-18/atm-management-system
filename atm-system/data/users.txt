@@ -1,8 +1,1 @@
-1 Alice 45678
-2 Michel 45678
-3 sedia doodk
-4 aminata 45678
-5 asta 45678
-6 anata 45678
-7 mina 45678
-8 anna 45678
+0 Alice 45678
