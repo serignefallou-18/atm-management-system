@@ -34,14 +34,13 @@ void saveAccountToFile(FILE *ptr, struct User u, struct Record r)
             r.phone,
             r.amount,
             r.accountType);
-    
+
     char date[200]; // Chaîne pour stocker la date YYYY-MM-DD (10 caractères pour la date + 1 pour le caractère nul)
     snprintf(date, sizeof(date), "%04d-%02d-%02d", r.deposit.year, r.deposit.month, r.deposit.day);
 
-
     char sql_command[1000];
-    snprintf(sql_command, sizeof(sql_command), "sqlite3 ./db/atm.db \"INSERT INTO records(idaccount, login, ussername, datecreation, country, phone, balance, type) VALUES('%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s');\"",r.accountNbr, (&u)->name, (&u)->name, date, r.country, r.phone, (int)r.amount, r.accountType);
-    printf("%s",sql_command);
+    snprintf(sql_command, sizeof(sql_command), "sqlite3 ./db/atm.db \"INSERT INTO records(idaccount, login, ussername, datecreation, country, phone, balance, type) VALUES('%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s');\"", r.accountNbr, (&u)->name, (&u)->name, date, r.country, r.phone, (int)r.amount, r.accountType);
+    printf("%s", sql_command);
     system(sql_command);
 }
 
@@ -134,13 +133,22 @@ noAccount:
     printf("\nEnter today's date(mm/dd/yyyy):");
     scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
     ViderBuffer();
-    if ((r.deposit.year > year))
+
+    /*   printf("%d", year);
+      printf("-----w %d", r.deposit.year); */
+
+    if ((r.deposit.year > year) || r.deposit.year <= 0)
     {
         printf("year invalid");
         goto noAccount;
     }
+    if(r.deposit.day<0){
+         printf("year invalid");
+        goto noAccount;
+    }
+    
 
-    if ((r.deposit.year == year) && (r.deposit.month > month) || (r.deposit.month > 12))
+    if ((r.deposit.year == year) && (r.deposit.month > month) || (r.deposit.month > 12) || (r.deposit.month <= 0))
     {
         printf("month invalid");
         goto noAccount;
@@ -172,9 +180,19 @@ noAccount:
     ViderBuffer();
     printf("\nEnter the phone number:");
     scanf("%d", &r.phone);
+    if ((r.phone < 0))
+    {
+        printf("phone  invalid");
+        goto noAccount;
+    }
     ViderBuffer();
     printf("\nEnter amount to deposit: $");
     scanf("%lf", &r.amount);
+    if ((r.amount < 0))
+    {
+        printf("balance  invalid");
+        goto noAccount;
+    }
     ViderBuffer();
 typeAccount:
     printf("\nChoose the type of account:\n\t-> saving\n\t-> current\n\t-> fixed01(for 1 year)\n\t-> fixed02(for 2 years)\n\t-> fixed03(for 3 years)\n\n\tEnter your choice:");
@@ -187,8 +205,8 @@ typeAccount:
         goto typeAccount;
     }
 
-    //ViderBuffer();
-    //printf("%d", u.id);
+    // ViderBuffer();
+    // printf("%d", u.id);
     saveAccountToFile(pf, u, r);
 
     fclose(pf);

@@ -7,7 +7,7 @@ mail:dia.serignfalou@gmailcom
 <div align="center"class="titre"> 
  ATM MANAGEMENT SYSTEM
 </div>
-ATM management is a system  system where users can do the following actions:
+ATM management is a system where users can do the following actions:
 
 1. Login/Register <br>
 2. Create a new account
@@ -31,10 +31,10 @@ and the last one is from a database. it's shema is like:
 </div>
 
 
-### to use my application you have to clone it [here](https://learn.zone01dakar.sn/git/sedia/atm-management-system.git)
+### to use my application you have to:
 
-### RUN This command
-### cd atm-managelent-system
+### RUN This command: git clone [link](https://learn.zone01dakar.sn/git/sedia/atm-management-system.git)
+### RUN cd atm-managelent-system
 ### RUN make on the terminal (this will create an executable file)
 
 ### RUN ./atm
