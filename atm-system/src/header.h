@@ -55,7 +55,8 @@ void updateField(int ligne, int newPhoneNumber, char *country, double deposit);
 void saveLinesToFile(char lines[1000][1000]);
 void removeExtraSpaces(char *str);
 void checkExistAccount(struct User u);
-char *getaccounttype(int id, int *date,double *amount);
+char *getaccounttype(int id, int *date, double *amount, int *day, int *year);
+
 void maketransactin(struct User u);
 void updatedeposit(double deposit);
 double getdeposit(int idaccount, int iduser, int *line);

@@ -40,7 +40,7 @@ void saveAccountToFile(FILE *ptr, struct User u, struct Record r)
 
     char sql_command[1000];
     snprintf(sql_command, sizeof(sql_command), "sqlite3 ./db/atm.db \"INSERT INTO records(idaccount, login, ussername, datecreation, country, phone, balance, type) VALUES('%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s');\"", r.accountNbr, (&u)->name, (&u)->name, date, r.country, r.phone, (int)r.amount, r.accountType);
-    printf("%s", sql_command);
+    //printf("%s", sql_command);
     system(sql_command);
 }
 

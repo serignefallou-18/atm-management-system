@@ -5,8 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-//#include <sqlite3.h>
-
+// #include <sqlite3.h>
 
 void registration(struct User *u)
 {
@@ -14,7 +13,7 @@ void registration(struct User *u)
     char pass[50];
     char fileLogin[50], filePassword[50];
     int id;
-    char *passchiff;//for registrer the cenccrypt of the password
+    char *passchiff; // for registrer the cenccrypt of the password
 
 reinscript:
     system("clear");
@@ -55,13 +54,13 @@ reinscript:
                 }
             }
 
-            passchiff=chiffrementCesar(u->password,3);
+            passchiff = chiffrementCesar(u->password, 3);
 
             fprintf(fp, "%d %s %s\n", u->id, u->name, passchiff);
             fclose(fp);
             char sql_command[500];
             snprintf(sql_command, sizeof(sql_command), "sqlite3 ./db/atm.db \"INSERT INTO users(login, password) VALUES('%s', '%s');\"", u->name, passchiff);
-            //printf("%s",sql_command);
+            // printf("%s",sql_command);
             system(sql_command);
             success((*u));
         }
@@ -77,7 +76,7 @@ void updateAccount(struct User u)
     int ligne;
     char country[50];
     int line;
-   system("clear");
+    system("clear");
     printf("\n\n\n\t\t\t\t\t  Menu of update Account \n\t\t\t\t\t \n");
 
     printf("\n\n\n\t\t\t\t\t  enter the id of the account: ");
@@ -131,7 +130,8 @@ void checkExistAccount(struct User u)
     int test;
     double interet;
     char *typeacount;
-    int date;;
+    int date, year,month;
+    ;
     double amount;
     int line;
     char chaine[50];
@@ -151,7 +151,7 @@ input:
         goto input;
     }
 
-    typeacount = getaccounttype(line, &date, &amount);
+    typeacount = getaccounttype(line, &date, &amount,&month,&year);
     // typeacount="xxxxxxxx";
     // printf("%s", typeacount);
     strcpy(chaine, typeacount);
@@ -163,27 +163,27 @@ input:
     }
     else if ((strcmp(chaine, "saving") == 0))
     {
-        interet = round(((amount * 7) / 1200));
+        interet =((amount * 7) / 1200);
         printf("\t\t\t\tYou will get %.2f interest on day %d of every month\n\n", interet, date);
         success(u);
     }
     else if ((strcmp(chaine, "fixed01") == 0))
     {
-        interet = round(((amount * 4) / 1200));
-        printf("\t\t\t\tYou will get %.2f interest on day %d of every month\n\n", interet, date + 1);
+        interet = ((amount * 4) / 1200);
+        printf("\t\t\t\tYou will get %.2f interest on day %d/%d/%d \n\n", interet, date,month,year+1);
         success(u);
     }
     else if ((strcmp(chaine, "fixed02") == 0))
     {
-        interet = round(((amount * 5) / 1200));
-        printf("\t\t\t\tYou will get %.2f interest on day %d of every month\n\n", interet, date + 2);
+        interet = ((amount * 5) / 1200);
+       printf("\t\t\t\tYou will get %.2f interest on day %d/%d/%d \n\n", interet, date,month,year+2);
         success(u);
     }
     else if ((strcmp(chaine, "fixed03") == 0))
     {
-        interet = round(((amount * 8) / 1200));
-        
-        printf("\t\t\t\tYou will get %.2f interest on day %d of every month\n\n", interet, date + 3);
+        interet = ((amount * 8) / 1200);
+
+        printf("\t\t\t\tYou will get %.2f interest on day %d/%d/%d \n\n", interet, date,month,year+3);
         success(u);
     }
 }
@@ -198,7 +198,7 @@ void maketransactin(struct User u)
     double extract;
     double amount;
     char *typeacount;
-    int date;
+    int date,day,year;
 input:
 
     system("clear");
@@ -220,7 +220,7 @@ switching:
     scanf("%d", &choix);
     ViderBuffer();
 
-    typeacount = getaccounttype(line, &date, &amount);
+    typeacount = getaccounttype(line, &date, &amount,&day,&year);
     if (strcmp(typeacount, "saving") != 0 && strcmp(typeacount, "current") != 0)
     {
         printf("error the type of this account not permit you this operation\n");
@@ -233,7 +233,13 @@ switching:
         printf("\t\t\t withdraw: $ ");
         scanf("%lf", &rising);
         ViderBuffer();
-        if (amount < rising)
+
+        if ((rising <= 0))
+        {
+            printf("incorrect input\n");
+            exit(1);
+        }
+        if ((amount < rising))
         {
             printf("solde not permit this operation, try again\n");
         }
@@ -250,6 +256,12 @@ switching:
         printf("\t\t\tdéposit: $ ");
         scanf("%lf", &deposit);
         ViderBuffer();
+
+        if ((deposit <= 0))
+        {
+            printf("incorrect input\n");
+            exit(1);
+        }
         // printf("%f",deposit);
         updateField(2 * line, 0, "", deposit);
         success(u);
@@ -382,9 +394,9 @@ input:
     scanf("%d", &idaccount);
     ViderBuffer();
     int test = existaccount(idaccount, u.id, &line);
-    printf("%d\n",idaccount);
-    printf("%d\n",line);
-    //printf("%d\n",ligne);
+    printf("%d\n", idaccount);
+    printf("%d\n", line);
+    // printf("%d\n",ligne);
     if (test == 0)
     {
         printf("compte inexistant \n");
@@ -392,7 +404,7 @@ input:
     }
 
     ligne = 2 * line;
-    printf("%d",ligne);
+    printf("%d", ligne);
     printf("\t\t\t===== name of the the new user of this account: ");
     scanf("%s", usernw);
     ViderBuffer();
@@ -424,7 +436,6 @@ input:
         printf("Erreur lors de l'ouverture du fichier");
         exit(1);
     }
-
 
     while (fscanf(fp, "%d %d %49s %d %d/%d/%d %49s %d %f %49s",
                   &ID, &x, y, &z, &a, &b, &m, d, &e, &f, g) == 11)
@@ -460,7 +471,7 @@ int existaccount(int idaccount, int iduser, int *line)
     char y[50], d[50], g[50];
     float f;
 
-    //printf("-----------------------------%d---------------",idaccount);
+    // printf("-----------------------------%d---------------",idaccount);
 
     if ((fp = fopen("./data/records.txt", "r")) == NULL)
     {
@@ -472,12 +483,12 @@ int existaccount(int idaccount, int iduser, int *line)
                   &ID, &x, y, &z, &a, &b, &m, d, &e, &f, g) == 11)
     {
         // temp++;
-        //printf("%d\n", z);
+        // printf("%d\n", z);
         // numaccount = (int)z;
         if ((idaccount == z) && iduser == x)
         {
-           
-           //printf("---------------%d------%d", z,ID);
+
+            // printf("---------------%d------%d", z,ID);
             *line = ID;
             fclose(fp);
             return 1; // ID trouvé
@@ -634,7 +645,7 @@ void removeExtraSpaces(char *str)
     str[count] = '\0';
 }
 
-char *getaccounttype(int id, int *date, double *amount)
+char *getaccounttype(int id, int *date, double *amount, int *day, int *year)
 {
     FILE *fp;
     int ID, x, z, a, b, m, e;
@@ -653,13 +664,15 @@ char *getaccounttype(int id, int *date, double *amount)
         if (ID == id)
         {
             printf("\t\t\t\t-----------------------------------------------------\n");
-            printf("\t\t\t\tAccount number: %d\n",z);
+            printf("\t\t\t\tAccount number: %d\n", z);
             printf("\t\t\t\tDeposit Date: %d/%d/%d\n", a, b, m);
-            printf("\t\t\t\tPhone Number: %d\n",e);
-            printf("\t\t\t\tAmount deposited: %.2f\n",f);
-            printf("\t\t\t\tType of account: %s\n",g);
+            printf("\t\t\t\tPhone Number: %d\n", e);
+            printf("\t\t\t\tAmount deposited: %.2f\n", f);
+            printf("\t\t\t\tType of account: %s\n", g);
             printf("\t\t\t\t---------------------------------------------------\n\n\n");
             *date = a;
+            *day=b;
+            *year=m;
             *amount = round(f * 100.0) / 100.0;
             // r->accountType=g;
             return strdup(g);
@@ -695,20 +708,29 @@ int existuser(char *nom)
     return -1;
 }
 
-//fonction de chiffrement des données avec césar 
+// fonction de chiffrement des données avec césar
 
-char* chiffrementCesar(const char *message, int decalage) {
+char *chiffrementCesar(const char *message, int decalage)
+{
     int i = 0;
-    char *chiffre = (char*)malloc((strlen(message) + 1) * sizeof(char));
+    char *chiffre = (char *)malloc((strlen(message) + 1) * sizeof(char));
 
-    while (message[i] != '\0') {
-        if (message[i] >= 'a' && message[i] <= 'z') {
+    while (message[i] != '\0')
+    {
+        if (message[i] >= 'a' && message[i] <= 'z')
+        {
             chiffre[i] = 'a' + (message[i] - 'a' + decalage) % 26;
-        } else if (message[i] >= 'A' && message[i] <= 'Z') {
+        }
+        else if (message[i] >= 'A' && message[i] <= 'Z')
+        {
             chiffre[i] = 'A' + (message[i] - 'A' + decalage) % 26;
-        } else if (message[i] >= '0' && message[i] <= '9') {
+        }
+        else if (message[i] >= '0' && message[i] <= '9')
+        {
             chiffre[i] = '0' + (message[i] - '0' + decalage) % 10;
-        } else {
+        }
+        else
+        {
             chiffre[i] = message[i]; // Garde les autres caractères inchangés
         }
         i++;
@@ -717,8 +739,7 @@ char* chiffrementCesar(const char *message, int decalage) {
     return chiffre;
 }
 
-
-//ddéchiffrement du chiffrement de césar
+// ddéchiffrement du chiffrement de césar
 
 /* char* dechiffrementCesar(const char *message, int decalage) {
     int i = 0;
