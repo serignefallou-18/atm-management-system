@@ -1,5 +1,6 @@
 #include "header.h"
 #include "time.h"
+#include <limits.h>
 
 const char *RECORDS = "./data/records.txt";
 time_t timestamp;
@@ -117,6 +118,9 @@ void createNewAcc(struct User u)
     int year, month, day;
     FILE *pf = fopen(RECORDS, "a+");
     struct tm *info;
+   // int32_t maxInt = INT32_MAX;
+
+    long long int x;
 
     system("clear");
     printf("\t\t\t===== New record =====\n");
@@ -164,8 +168,14 @@ noAccount:
         goto noAccount;
     }
     printf("\nEnter the account number:");
-    scanf("%d", &r.accountNbr);
+
+    if (scanf("%lld", &x) != 1 || x < INT_MIN || x > INT_MAX) {
+        printf("La saisie n'est pas valide ou dépasse la plage des entiers signés sur 32 bits.\n");
+        goto noAccount; // Code d'erreur
+    }
     ViderBuffer();
+    r.accountNbr=x;
+    printf("%d",r.accountNbr);
 
     while (getAccountFromFile(pf, userName, &cr))
     {

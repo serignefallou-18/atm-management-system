@@ -41,6 +41,7 @@ void mainMenu(struct User u);
 void checkAllAccounts(struct User u);
 void success(struct User u);
 void stayOrReturn(int notGood, void f(struct User u), struct User u);
+void initMenu(struct User *u);
 
 
 
@@ -64,3 +65,4 @@ void removeaccount(struct User u);
 void makeowntransfer(struct User u);
 int existuser(char *nom);
 char* chiffrementCesar(const char *message, int decalage);
+void deconnect();

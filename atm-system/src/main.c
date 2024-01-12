@@ -16,7 +16,8 @@ void mainMenu(struct User u)
     printf("\n\t\t[5]- Make Transaction\n");
     printf("\n\t\t[6]- Remove existing account\n");
     printf("\n\t\t[7]- Transfer ownership\n");
-    printf("\n\t\t[8]- Exit\n");
+    printf("\n\t\t[8]- Disconnect\n");
+     printf("\n\t\t[9]- Exit\n");
 swithc:
     scanf("%d", &option);
     //ViderBuffer();
@@ -52,8 +53,12 @@ swithc:
         makeowntransfer(u);
         break;
     case 8:
+        deconnect();
+
+    case 9:
         exit(1);
         break;
+
     default:
         while ((c = getchar()) != '\n' && c != EOF);       
         printf("Invalid operation!\n");
@@ -83,7 +88,8 @@ void initMenu(struct User *u)
             case 1:
                 loginMenu(u->name, u->password);
                 char *chiff=chiffrementCesar(u->password,3);
-                printf("%s",getPassword(*u));
+                //printf("%s",getPassword(*u));
+                printf("%s",chiff);
                 if (strcmp(chiff, getPassword(*u)) == 0)
                 {  
 

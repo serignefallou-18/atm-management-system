@@ -67,6 +67,14 @@ reinscript:
     }
 }
 
+void deconnect()
+{
+    struct User u;
+    initMenu(&u);
+    mainMenu(u);
+    //return 0;
+}
+
 void updateAccount(struct User u)
 {
     int idaccount;
@@ -130,7 +138,7 @@ void checkExistAccount(struct User u)
     int test;
     double interet;
     char *typeacount;
-    int date, year,month;
+    int date, year, month;
     ;
     double amount;
     int line;
@@ -151,7 +159,7 @@ input:
         goto input;
     }
 
-    typeacount = getaccounttype(line, &date, &amount,&month,&year);
+    typeacount = getaccounttype(line, &date, &amount, &month, &year);
     // typeacount="xxxxxxxx";
     // printf("%s", typeacount);
     strcpy(chaine, typeacount);
@@ -163,27 +171,27 @@ input:
     }
     else if ((strcmp(chaine, "saving") == 0))
     {
-        interet =((amount * 7) / 1200);
+        interet = ((amount * 7) / 1200);
         printf("\t\t\t\tYou will get %.2f interest on day %d of every month\n\n", interet, date);
         success(u);
     }
     else if ((strcmp(chaine, "fixed01") == 0))
     {
         interet = ((amount * 4) / 1200);
-        printf("\t\t\t\tYou will get %.2f interest on day %d/%d/%d \n\n", interet, date,month,year+1);
+        printf("\t\t\t\tYou will get %.2f interest on day %d/%d/%d \n\n", interet, date, month, year + 1);
         success(u);
     }
     else if ((strcmp(chaine, "fixed02") == 0))
     {
         interet = ((amount * 5) / 1200);
-       printf("\t\t\t\tYou will get %.2f interest on day %d/%d/%d \n\n", interet, date,month,year+2);
+        printf("\t\t\t\tYou will get %.2f interest on day %d/%d/%d \n\n", interet, date, month, year + 2);
         success(u);
     }
     else if ((strcmp(chaine, "fixed03") == 0))
     {
         interet = ((amount * 8) / 1200);
 
-        printf("\t\t\t\tYou will get %.2f interest on day %d/%d/%d \n\n", interet, date,month,year+3);
+        printf("\t\t\t\tYou will get %.2f interest on day %d/%d/%d \n\n", interet, date, month, year + 3);
         success(u);
     }
 }
@@ -198,7 +206,7 @@ void maketransactin(struct User u)
     double extract;
     double amount;
     char *typeacount;
-    int date,day,year;
+    int date, day, year;
 input:
 
     system("clear");
@@ -220,7 +228,7 @@ switching:
     scanf("%d", &choix);
     ViderBuffer();
 
-    typeacount = getaccounttype(line, &date, &amount,&day,&year);
+    typeacount = getaccounttype(line, &date, &amount, &day, &year);
     if (strcmp(typeacount, "saving") != 0 && strcmp(typeacount, "current") != 0)
     {
         printf("error the type of this account not permit you this operation\n");
@@ -671,8 +679,8 @@ char *getaccounttype(int id, int *date, double *amount, int *day, int *year)
             printf("\t\t\t\tType of account: %s\n", g);
             printf("\t\t\t\t---------------------------------------------------\n\n\n");
             *date = a;
-            *day=b;
-            *year=m;
+            *day = b;
+            *year = m;
             *amount = round(f * 100.0) / 100.0;
             // r->accountType=g;
             return strdup(g);
