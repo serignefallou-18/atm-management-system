@@ -170,7 +170,7 @@ noAccount:
     printf("\nEnter the account number:");
 
     if (scanf("%lld", &x) != 1 || x < INT_MIN || x > INT_MAX) {
-        printf("La saisie n'est pas valide ou dépasse la plage des entiers signés sur 32 bits.\n");
+        printf("La saisie ne dépasse la plage des entiers signés sur 32 bits.\n");
         goto noAccount; // Code d'erreur
     }
     ViderBuffer();
@@ -189,21 +189,26 @@ noAccount:
     scanf("%s", r.country);
     ViderBuffer();
     printf("\nEnter the phone number:");
-    scanf("%d", &r.phone);
+    if (scanf("%lld", &x) != 1 || x < INT_MIN || x > INT_MAX) {
+        printf("La saisie ne dépasse la plage des entiers signés sur 32 bits.\n");
+        goto noAccount; // Code d'erreur
+    }
+
+    ViderBuffer();
+    r.phone=x;
     if ((r.phone < 0))
     {
         printf("phone  invalid");
         goto noAccount;
     }
-    ViderBuffer();
     printf("\nEnter amount to deposit: $");
     scanf("%lf", &r.amount);
+    ViderBuffer();
     if ((r.amount < 0))
     {
         printf("balance  invalid");
         goto noAccount;
     }
-    ViderBuffer();
 typeAccount:
     printf("\nChoose the type of account:\n\t-> saving\n\t-> current\n\t-> fixed01(for 1 year)\n\t-> fixed02(for 2 years)\n\t-> fixed03(for 3 years)\n\n\tEnter your choice:");
     scanf("%s", r.accountType);

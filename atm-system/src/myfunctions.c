@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <limits.h>
 // #include <sqlite3.h>
 
 void registration(struct User *u)
@@ -72,7 +73,7 @@ void deconnect()
     struct User u;
     initMenu(&u);
     mainMenu(u);
-    //return 0;
+    // return 0;
 }
 
 void updateAccount(struct User u)
@@ -84,6 +85,7 @@ void updateAccount(struct User u)
     int ligne;
     char country[50];
     int line;
+    long long int x;
     system("clear");
     printf("\n\n\n\t\t\t\t\t  Menu of update Account \n\t\t\t\t\t \n");
 
@@ -111,8 +113,13 @@ void updateAccount(struct User u)
         {
         case 1:
             printf("\n\n\n\t\t\t\t\t  Enter the new phone Number:");
-            scanf("%d", &phone);
+            if (scanf("%lld", &x) != 1 || x < INT_MIN || x > INT_MAX)
+            {
+                printf("La saisie ne dépasse la plage des entiers signés sur 32 bits.\n");
+                goto update; // Code d'erreur
+            }
             ViderBuffer();
+            phone=x;
             updateField(ligne, phone, "", 0);
             break;
         case 2:
@@ -207,6 +214,7 @@ void maketransactin(struct User u)
     double amount;
     char *typeacount;
     int date, day, year;
+    long long int x;
 input:
 
     system("clear");

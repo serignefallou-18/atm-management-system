@@ -1,1 +1,0 @@
-fgets(u.password, sizeof(u.password), stdin); 
