@@ -42,6 +42,7 @@ void checkAllAccounts(struct User u);
 void success(struct User u);
 void stayOrReturn(int notGood, void f(struct User u), struct User u);
 void initMenu(struct User *u);
+int joursDansFevrier(int annee);
 
 
 

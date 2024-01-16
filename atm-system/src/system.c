@@ -162,10 +162,14 @@ noAccount:
         printf("day invalid");
         goto noAccount;
     }
-    if ((r.deposit.month == 2) && (r.deposit.day > 29))
+    if ((r.deposit.month == 2))
     {
-        printf("day invalid");
-        goto noAccount;
+        int max=joursDansFevrier(r.deposit.year);
+        if(r.deposit.day>max){
+            printf("day invalid");
+            goto noAccount;
+
+        }
     }
     printf("\nEnter the account number:");
 
@@ -288,4 +292,17 @@ double getdeposit(int idaccount, int iduser, int *line)
 
     fclose(fp);
     return 0; // ID non trouvé
+}
+
+
+int estBissextile(int annee) {
+    return (annee % 4 == 0 && annee % 100 != 0) || (annee % 400 == 0);
+}
+
+int joursDansFevrier(int annee) {
+    if (estBissextile(annee)) {
+        return 29;
+    } else {
+        return 28;
+    }
 }
